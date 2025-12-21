@@ -22,3 +22,9 @@ jobs:
 
             - name: check styles
               run: pnpm run eslint
+
+            - name: build
+              run: pnpm run build
+
+            - name: test
+              run: pnpm run test
