@@ -1,4 +1,16 @@
 module.exports = {
+  'overrides': [
+    {
+      'files': ['cypress/**/*.js'],
+      'globals': {
+        'cy': 'readonly',
+        'Cypress': 'readonly'
+      }
+    }
+  ],
+  'settings': {
+    'react': { 'version': 'detect' }
+  },
   'env': {
     'browser': true,
     'es6': true,
