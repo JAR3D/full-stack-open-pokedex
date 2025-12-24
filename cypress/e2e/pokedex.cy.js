@@ -6,8 +6,8 @@ describe('Pokedex', function() {
   })
 
   it('user can navigate to the page of a particular pokemon', function() {
-    cy.visit('http://localhost:5001');
-    cy.contains('ivysaur').click();
-    cy.contains('chlorophyll');
+    cy.visit('http://localhost:5001')
+    cy.contains('ivysaur').click()
+    cy.contains('chlorophyll')
   })
 })
