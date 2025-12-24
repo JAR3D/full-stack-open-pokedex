@@ -11,6 +11,9 @@ primary_region = 'cdg'
 [env]
   PORT = "5001" # add this
 
+[processes]
+  app = "node app.js" # add this
+
 [http_service]
   internal_port = 5001
   force_https = true
