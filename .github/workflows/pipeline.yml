@@ -1,5 +1,8 @@
 name: deployment pipeline
 
+env:
+  CONDITION: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, '\n'), '#skip') }}
+
 on:
     push:
         branches:
@@ -40,24 +43,24 @@ jobs:
                 wait-on: http://localhost:5001
 
             - name: setup fly.io
-              if: ${{ github.event_name == 'push' }}
+              if: ${{ env.CONDITION == 'true' }}
               uses: superfly/flyctl-actions/setup-flyctl@master
             
             - name: deploy
-              if: ${{ github.event_name == 'push' }}
+              if: ${{ env.CONDITION == 'true' }}
               run: flyctl deploy --remote-only
               env:
                 FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
               
     tag_release:
-      if: ${{ github.event_name == 'push' }}
-      needs: [simple_deployment_pipeline]
-      runs-on: ubuntu-latest
-      steps:
-          - uses: actions/checkout@v4
+        needs: [simple_deployment_pipeline]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-          - name: bump version and push tag
-            uses: anothrNick/github-tag-action@1.75.0
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              DEFAULT_BUMP: patch
+            - name: bump version and push tag
+              if: ${{ env.CONDITION == 'true' }}
+              uses: anothrNick/github-tag-action@1.75.0
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                DEFAULT_BUMP: patch
